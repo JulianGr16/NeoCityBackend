@@ -2,11 +2,20 @@
   "name": "neocitybackend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "middlewares",
+    "base de datos",
+    "MongoDB",
+    "ExpressJS"
+  ],
+  "author": "Julian Garay, Franco Pereyra",
   "license": "ISC",
-  "description": ""
+  "description": "backend para el NeoCity Hotel",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
