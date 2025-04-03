@@ -1,4 +1,6 @@
 import express from 'express'
+import morgan from 'morgan'
+import cors from 'cors'
 
 //-1 configurar un puerto
 const app = express()
@@ -9,6 +11,8 @@ app.listen(app.get('port'), ()=>{
 })
 
 //-2 configurar middelwares
+app.use(cors()) // habilita conexiones remotas
+app.use(morgan('dev')) // nos da informacion extra en la terminal
 
 //-3 configurar las rutas
 // http://localhost:4000/prueba
