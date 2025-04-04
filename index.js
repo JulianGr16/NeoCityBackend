@@ -13,6 +13,8 @@ app.listen(app.get('port'), ()=>{
 //-2 configurar middelwares
 app.use(cors()) // habilita conexiones remotas
 app.use(morgan('dev')) // nos da informacion extra en la terminal
+app.use(express.json()) // interpretar los datos en formato json de la solicitud
+app.use(express.urlencoded({extended: true})) 
 
 //-3 configurar las rutas
 // http://localhost:4000/prueba
