@@ -2,7 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url';
+import './src/database/dbConnection.js'
 
 //-1 configurar un puerto
 const app = express()
