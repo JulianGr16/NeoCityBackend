@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const mongoDB = process.env.MONGO_ACCESS;
+const mongoDB = process.env.MONGODB;
 
 mongoose.connect(mongoDB);
 

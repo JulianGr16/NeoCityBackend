@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { funcionPrueba } from "../../controllers/habitaciones.controllers.js";
+import { crearHabitacion, funcionPrueba } from "../../controllers/habitaciones.controllers.js";
 
 
 const router = Router();
 router.route('/prueba').get(funcionPrueba)
+router.route('/habitaciones').post(crearHabitacion)
 
 export default router
