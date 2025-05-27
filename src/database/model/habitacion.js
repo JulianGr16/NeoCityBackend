@@ -41,10 +41,10 @@ const habitacionSchema = new Schema({
         return /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/.test(valor);
       },
     },
-    reserva: {
-      type: Boolean,
-      default: false,
-    },
+  },
+  reserva: {
+    type: Boolean,
+    default: false,
   },
 });
 
