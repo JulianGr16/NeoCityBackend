@@ -1,28 +1,30 @@
-import express from 'express'
-import morgan from 'morgan'
-import cors from 'cors'
-import path from 'path'
-import { fileURLToPath } from 'url';
-import './src/database/dbConnection.js'
-import router from './src/database/routes/habitaciones.routes.js';
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import dotenv from "dotenv";
+import "./src/database/dbConnection.js"
+import habitacionesRoutes from "./src/database/routes/habitaciones.routes.js";
+import usuariosRoutes from "./src/database/routes/usuarios.routes.js";
+import reservasRoutes from "./src/database/routes/reservas.routes.js";
 
-//-1 configurar un puerto
-const app = express()
+dotenv.config();
+const app = express();
 
-app.set('port', process.env.PORT || 4000)
-app.listen(app.get('port'), ()=>{
-    console.info('Estoy escuchando el puerto '+app.get('port'))
-})
+// Configurar CORS para permitir conexiones desde el frontend
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'], // Puertos comunes de Vite y desarrollo
+  credentials: true
+}));
 
-//-2 configurar middelwares
-app.use(cors()) // habilita conexiones remotas
-app.use(morgan('dev')) // nos da informacion extra en la terminal
-app.use(express.json()) // interpretar los datos en formato json de la solicitud
-app.use(express.urlencoded({extended: true}))
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-app.use(express.static(path.join(__dirname, '/public')))
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.static('public'));
 
-//-3 configurar las rutas
-// http://localhost:4000/prueba
-app.use('/api', router)
+app.use("/api/habitaciones", habitacionesRoutes);
+app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/reservas", reservasRoutes);
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+});
