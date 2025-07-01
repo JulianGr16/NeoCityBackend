@@ -59,3 +59,23 @@ export const loginUsuario = async (req, res) => {
     res.status(500).json({ mensaje: "Error al iniciar sesión" });
   }
 };
+
+export const obtenerUsuario = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+    
+    // Transformar _id a id para compatibilidad con frontend
+    const usuarioTransformado = {
+      ...usuario.toObject(),
+      id: usuario._id,
+    };
+    
+    res.status(200).json(usuarioTransformado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener el usuario" });
+  }
+};
