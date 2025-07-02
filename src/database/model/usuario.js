@@ -19,6 +19,15 @@ const usuarioSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // Nuevo campo para suspender cuentas
+  cuentaSuspendida: {
+    type: Boolean,
+    default: false,
+  },
+  fechaRegistro: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const Usuario = mongoose.model("Usuario", usuarioSchema);

@@ -1,4 +1,3 @@
-// En tu archivo habitacion.js del backend
 import mongoose, { Schema } from "mongoose";
 
 const habitacionSchema = new Schema({
