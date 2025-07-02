@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const mongoDB = process.env.MONGODB;
+dotenv.config();
+
+const mongoDB = process.env.MONGO_ACCESS;
 
 mongoose.connect(mongoDB);
 
 const conexion = mongoose.connection;
 
-conexion.once('open', ()=>{
-    console.info('DB conectada')
-})
+conexion.once('open', () => {
+  console.info('DB conectada');
+});
