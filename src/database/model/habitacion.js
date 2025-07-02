@@ -1,13 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const habitacionSchema = new Schema({
-  numero: {
-    type: Number,
-    required: [true, "el numero de la habitacion es un dato obligatorio"],
-    min: 1,
-    max: 1000,
-    unique: true,
-  },
   tipo: {
     type: String,
     required: [true, "el tipo de habitacion es un dato obligatorio"],

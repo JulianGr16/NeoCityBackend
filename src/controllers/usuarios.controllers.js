@@ -10,9 +10,11 @@ export const registrarUsuario = async (req, res) => {
   try {
     const { nombreUsuario, email, password } = req.body;
 
-    const existeUsuario = await Usuario.findOne({ email });
+    const existeUsuario = await Usuario.findOne({ 
+      $or: [{ email }, { nombreUsuario }] 
+    });
     if (existeUsuario) {
-      return res.status(400).json({ mensaje: "El email ya está registrado" });
+      return res.status(400).json({ mensaje: "El email o nombre de usuario ya está registrado" });
     }
 
     const esAdmin = adminEmails.includes(email);
@@ -22,6 +24,7 @@ export const registrarUsuario = async (req, res) => {
       email,
       password,
       esAdmin,
+      cuentaSuspendida: false
     });
 
     await nuevoUsuario.save();
@@ -41,6 +44,13 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
+    // Verificar suspensión manejando campos duplicados
+    const estaSuspendido = usuario.cuentaSuspendida === true || usuario.estadoCuenta === "suspendido";
+    
+    if (estaSuspendido) {
+      return res.status(403).json({ mensaje: "Tu cuenta ha sido suspendida. Contacta al administrador." });
+    }
+
     res.status(200).json({
       mensaje: "Login exitoso",
       usuario: {
@@ -48,6 +58,7 @@ export const loginUsuario = async (req, res) => {
         nombreUsuario: usuario.nombreUsuario,
         email: usuario.email,
         esAdmin: usuario.esAdmin,
+        cuentaSuspendida: usuario.cuentaSuspendida || false
       },
     });
   } catch (error) {
@@ -81,6 +92,8 @@ export const listarUsuarios = async (req, res) => {
     const usuariosTransformados = usuarios.map((usuario) => ({
       ...usuario.toObject(),
       id: usuario._id,
+      tipoUsuario: usuario.esAdmin ? "Administrador" : "Cliente",
+      estadoFinal: usuario.cuentaSuspendida === true || usuario.estadoCuenta === "suspendido" ? "Suspendido" : "Activo"
     }));
     res.status(200).json(usuariosTransformados);
   } catch (error) {
