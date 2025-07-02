@@ -10,9 +10,8 @@ import reservasRoutes from "./src/database/routes/reservas.routes.js";
 dotenv.config();
 const app = express();
 
-// Configurar CORS para permitir conexiones desde el frontend
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'], // Puertos comunes de Vite y desarrollo
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
 
@@ -26,5 +25,5 @@ app.use("/api/reservas", reservasRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+  console.info(`🚀 Servidor corriendo en puerto ${PORT}`);
 });

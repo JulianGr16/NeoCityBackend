@@ -1,24 +1,21 @@
 import Usuario from "../database/model/usuario.js";
 
-const correoElectronicoAdmin = [
+const adminEmails = [
   "admin12@gmail.com",
   "admin@neocity.com",
   "admin20@neocity.com",
 ];
 
-// Crear usuario (registro)
 export const registrarUsuario = async (req, res) => {
   try {
     const { nombreUsuario, email, password } = req.body;
 
-    // Verificar si ya existe
     const existeUsuario = await Usuario.findOne({ email });
     if (existeUsuario) {
       return res.status(400).json({ mensaje: "El email ya está registrado" });
     }
 
-    // Determinar si es administrador basado en el email
-    const esAdmin = correoElectronicoAdmin.includes(email);
+    const esAdmin = adminEmails.includes(email);
 
     const nuevoUsuario = new Usuario({
       nombreUsuario,
@@ -35,7 +32,6 @@ export const registrarUsuario = async (req, res) => {
   }
 };
 
-// Login (verificación)
 export const loginUsuario = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,11 +41,6 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
-    // Verificar si la cuenta está suspendida
-    if (usuario.cuentaSuspendida) {
-      return res.status(403).json({ mensaje: "Tu cuenta ha sido suspendida. Contacta al administrador." });
-    }
-
     res.status(200).json({
       mensaje: "Login exitoso",
       usuario: {
@@ -57,7 +48,6 @@ export const loginUsuario = async (req, res) => {
         nombreUsuario: usuario.nombreUsuario,
         email: usuario.email,
         esAdmin: usuario.esAdmin,
-        cuentaSuspendida: usuario.cuentaSuspendida,
       },
     });
   } catch (error) {
@@ -73,7 +63,6 @@ export const obtenerUsuario = async (req, res) => {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
     
-    // Transformar _id a id para compatibilidad con frontend
     const usuarioTransformado = {
       ...usuario.toObject(),
       id: usuario._id,
@@ -86,10 +75,9 @@ export const obtenerUsuario = async (req, res) => {
   }
 };
 
-// Listar todos los usuarios (solo para administradores)
 export const listarUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find().select('-password'); // Excluir passwords
+    const usuarios = await Usuario.find().select('-password');
     const usuariosTransformados = usuarios.map((usuario) => ({
       ...usuario.toObject(),
       id: usuario._id,
@@ -101,7 +89,6 @@ export const listarUsuarios = async (req, res) => {
   }
 };
 
-// Editar usuario
 export const editarUsuario = async (req, res) => {
   try {
     const usuarioBuscado = await Usuario.findById(req.params.id);
@@ -110,7 +97,6 @@ export const editarUsuario = async (req, res) => {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
 
-    // No permitir cambiar el campo esAdmin a través de esta ruta
     const { esAdmin, ...datosActualizados } = req.body;
 
     await Usuario.findByIdAndUpdate(req.params.id, datosActualizados);
@@ -121,7 +107,6 @@ export const editarUsuario = async (req, res) => {
   }
 };
 
-// Suspender/Activar cuenta de usuario
 export const cambiarEstadoCuenta = async (req, res) => {
   try {
     const { cuentaSuspendida } = req.body;
@@ -131,7 +116,6 @@ export const cambiarEstadoCuenta = async (req, res) => {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
 
-    // No permitir suspender cuentas de administrador
     if (usuarioBuscado.esAdmin) {
       return res.status(400).json({ mensaje: "No se puede suspender una cuenta de administrador" });
     }
@@ -145,7 +129,6 @@ export const cambiarEstadoCuenta = async (req, res) => {
   }
 };
 
-// Eliminar usuario
 export const eliminarUsuario = async (req, res) => {
   try {
     const usuarioBuscado = await Usuario.findById(req.params.id);
@@ -154,7 +137,6 @@ export const eliminarUsuario = async (req, res) => {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
 
-    // No permitir eliminar cuentas de administrador
     if (usuarioBuscado.esAdmin) {
       return res.status(400).json({ mensaje: "No se puede eliminar una cuenta de administrador" });
     }

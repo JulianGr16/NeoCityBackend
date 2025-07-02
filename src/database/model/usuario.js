@@ -19,7 +19,6 @@ const usuarioSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // Nuevo campo para suspender cuentas
   cuentaSuspendida: {
     type: Boolean,
     default: false,

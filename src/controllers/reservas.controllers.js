@@ -17,12 +17,7 @@ export const listarReservas = async (req, res) => {
     const filtro = usuarioId ? { usuarioId } : {};
     
     const reservas = await Reserva.find(filtro);
-    // Transformar cada reserva para agregar el campo 'id'
-    const reservasTransformadas = reservas.map(reserva => ({
-      ...reserva.toObject(),
-      id: reserva._id
-    }));
-    res.status(200).json(reservasTransformadas);
+    res.status(200).json(reservas);
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: "Error al obtener las reservas" });
@@ -35,12 +30,7 @@ export const obtenerReserva = async (req, res) => {
     if (!reserva) {
       return res.status(404).json({ mensaje: "Reserva no encontrada" });
     }
-    // Transformar _id a id para compatibilidad con frontend
-    const reservaTransformada = {
-      ...reserva.toObject(),
-      id: reserva._id
-    };
-    res.status(200).json(reservaTransformada);
+    res.status(200).json(reserva);
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: "Error al obtener la reserva" });

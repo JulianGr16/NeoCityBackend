@@ -1,10 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 const habitacionSchema = new Schema({
+  numero: {
+    type: Number,
+    required: [true, "el numero de la habitacion es un dato obligatorio"],
+    min: 1,
+    max: 1000,
+    unique: true,
+  },
   tipo: {
     type: String,
     required: [true, "el tipo de habitacion es un dato obligatorio"],
-    enum: ["Suite", "Suite Standard", "Suite Junior", "Suite Premium"],
+    enum: ["Suite Standard", "Suite Junior", "Suite Premium"],
   },
   capacidad: {
     type: Number,
@@ -20,7 +27,11 @@ const habitacionSchema = new Schema({
   },
   fecha: {
     type: String,
-    required: [true, "la fecha disponible es un dato obligatorio"],
+    required: [true, "la fehca disponible es un dato obligatorio"],
+    match: [
+      /^\d{1,2}\/\d{1,2}\/\d{4} a \d{1,2}\/\d{1,2}\/\d{4}$/,
+      'La fecha debe estar en el formato "dd/mm/yyyy a dd/mm/yyyy"',
+    ],
   },
   imagen: {
     type: String,
@@ -33,10 +44,10 @@ const habitacionSchema = new Schema({
   },
   reserva: {
     type: Boolean,
-    required: [true, "el estado de la habitación es obligatorio"], // Hacer obligatorio
     default: false,
   },
 });
 
 const Habitacion = mongoose.model("habitacion", habitacionSchema);
+
 export default Habitacion;
