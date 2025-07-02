@@ -1,7 +1,30 @@
-import express from 'express'
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import dotenv from "dotenv";
+import "./src/database/dbConnection.js"
+import habitacionesRoutes from "./src/database/routes/habitaciones.routes.js";
+import usuariosRoutes from "./src/database/routes/usuarios.routes.js";
+import reservasRoutes from "./src/database/routes/reservas.routes.js";
 
-//-1 configurar un puerto
+dotenv.config();
+const app = express();
 
-//-2 configurar middelwares
+// Configurar CORS para permitir conexiones desde el frontend
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'], // Puertos comunes de Vite y desarrollo
+  credentials: true
+}));
 
-//-3 configurar las rutas
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.static('public'));
+
+app.use("/api/habitaciones", habitacionesRoutes);
+app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/reservas", reservasRoutes);
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+});

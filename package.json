@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node --env-file .env --watch index.js"
   },
   "keywords": [
     "middlewares",
@@ -17,6 +18,7 @@
   "description": "backend para el NeoCity Hotel",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "mongoose": "^8.13.1",
     "morgan": "^1.10.0"
