@@ -44,7 +44,6 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
-    // Verificar suspensión manejando campos duplicados
     const estaSuspendido = usuario.cuentaSuspendida === true || usuario.estadoCuenta === "suspendido";
     
     if (estaSuspendido) {
