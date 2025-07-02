@@ -4,7 +4,7 @@ import { crearHabitacion, editarHabitaciones, funcionPrueba, listarHabitaciones,
 
 const router = Router();
 router.route('/prueba').get(funcionPrueba)
-router.route('/habitaciones').post(crearHabitacion).get(listarHabitaciones)
-router.route('/habitaciones/:id').put(editarHabitaciones).delete(eliminarHabitaciones).get(obtenerHabitacion)
+router.route('/').post(crearHabitacion).get(listarHabitaciones)
+router.route('/:id').put(editarHabitaciones).delete(eliminarHabitaciones).get(obtenerHabitacion)
 
 export default router
