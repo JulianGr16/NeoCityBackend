@@ -2,26 +2,44 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import "./src/database/dbConnection.js"
 import habitacionesRoutes from "./src/database/routes/habitaciones.routes.js";
 import usuariosRoutes from "./src/database/routes/usuarios.routes.js";
 import reservasRoutes from "./src/database/routes/reservas.routes.js";
-
 dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:3000',
+    'https://tu-frontend-vercel.vercel.app', // Reemplaza con tu dominio de frontend
+    /\.vercel\.app$/ // Permite cualquier subdominio de vercel.app
+  ],
   credentials: true
 }));
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.static('public'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Endpoint raíz
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use("/api/habitaciones", habitacionesRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/reservas", reservasRoutes);
+
+// Middleware para manejar rutas no encontradas
+app.use('*', (req, res) => {
+  res.status(404).json({ mensaje: 'Endpoint no encontrado' });
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
