@@ -15,8 +15,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173', 
     'http://localhost:3000',
-    'https://tu-frontend-vercel.vercel.app', // Reemplaza con tu dominio de frontend
-    /\.vercel\.app$/ // Permite cualquier subdominio de vercel.app
+    'https://tu-frontend-vercel.vercel.app', 
+    /\.vercel\.app$/ 
   ],
   credentials: true
 }));
@@ -27,7 +27,7 @@ app.use(express.static('public'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Endpoint raíz
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -36,7 +36,7 @@ app.use("/api/habitaciones", habitacionesRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/reservas", reservasRoutes);
 
-// Middleware para manejar rutas no encontradas
+
 app.use('*', (req, res) => {
   res.status(404).json({ mensaje: 'Endpoint no encontrado' });
 });
